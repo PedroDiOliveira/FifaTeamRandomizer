@@ -1,18 +1,18 @@
 import random
+import json
 
 ##########################################
 ##Funcao que retorna os nomes dos Clubes##
 ##########################################
 
 def recebeClubes():
-    # Passo 1: Leitura do arquivo de texto
-    with open('C:\\Users\\pedro\\FIFA\\texto\\Clubes.txt', 'r') as arquivo_times:
+
+    with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Clubes.txt', 'r') as arquivo_times:
         linhas = arquivo_times.read().splitlines()
 
-    # Passo 2: Processamento das linhas e criação da lista de times
     times = []
     for linha in linhas:
-        linha = linha.strip()  # Remove espaços em branco no início e no final da linha
+        linha = linha.strip() 
         palavras = linha.split()
         times.extend(palavras)
 
@@ -23,26 +23,120 @@ def recebeClubes():
 #################################################
 
 def recebeNomes():
-    # Passo 1: Leitura do arquivo de texto
-    with open('C:\\Users\\pedro\\FIFA\\texto\\Participantes.txt', 'r') as arquivo_nomes:
+
+    with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Participantes.txt', 'r') as arquivo_nomes:
         linhas = arquivo_nomes.read().splitlines()
 
-    # Passo 2: Processamento das linhas e criação da lista de times
     nomes = []
     for linha in linhas:
-        linha = linha.strip()  # Remove espaços em branco no início e no final da linha
+        linha = linha.strip()  
         palavras = linha.split()
         nomes.extend(palavras)
 
     return nomes
 
-times = recebeClubes()
-jogadores = recebeNomes()
 
-for jogador in jogadores:
-    for i in range(len(jogadores)):
-        timesorteio = random.choice(times)
-        times.remove(timesorteio)
-        print(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}")
-        break
+#####################################################################################
+##Funcao que sorteia os jogadores e cria um dicionario para armazenar os resultados##
+#####################################################################################
 
+def sorteio():
+    resultadosJogador = {}
+    times = recebeClubes()
+    jogadores = recebeNomes()
+    
+    for jogador in jogadores:#TODO
+        for i in range(len(jogadores)):
+            timesorteio = random.choice(times)
+            times.remove(timesorteio)
+            resultadosJogador[jogador] = timesorteio
+            print(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}")
+            break
+            
+    return resultadosJogador
+
+sorteio()
+
+
+#########################################################
+##Funcao que pega o dicionario e salva em um aquivo txt##
+#########################################################
+
+def salvaResultados(jogadores, times):#TODO
+    with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt', 'w') as arquivo:
+        print(X)    
+
+################################################
+##Funcao que verifica se um arquivo esta vazio##
+################################################
+
+def verificaArquivoVazio(nome_arquivo):
+    with open(nome_arquivo, 'r') as arquivo:
+        conteudo = arquivo.read()
+        return not conteudo
+
+
+########################################
+##Funcao do menu principal de execucao##
+########################################
+
+def menu():
+    sair = False
+    print('''
+          |-------------------------------------------------------|
+          |                                                       |
+          |  Bem vindo a x edicao do campeonato de Fifa do Betas  |
+          |                                                       |
+          |-------------------------------------------------------|
+
+          1- Mostrar participantes
+          2- Mostrar times
+          3- Sortear times
+          4- Sortear Confrontos  
+          5- Players Log               
+          6- Confrontos Log
+          7- Menu De Exclusao
+          8- Fechar programa                                                     
+          ''')
+    
+    while not sair:
+        print("")
+        opcao = int(input("Digite uma opcao: "))
+        if opcao == 1:#CASO 1
+            if verificaArquivoVazio('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Participantes.txt'):
+                print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Participantes.txt'.")
+            else:
+                nomes = recebeNomes()
+                print(f'''Participantes:  {nomes}''')
+                continue
+        elif opcao == 2:#CASO 2
+            if verificaArquivoVazio('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Clubes.txt'):
+                print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Clubes.txt'.")
+            else:
+                clubes = recebeClubes()
+                print(f'''Participantes:  {clubes}''')
+                continue
+        elif opcao == 3:
+            if not verificaArquivoVazio('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt'):
+                sobrepor = int(input("Parece que ja existe um save anterior! Deseja sobrepor o antigo save?(1-sim/2-nao)"))
+                if sobrepor == 1:
+                    resultados = sorteio()
+                    with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt', 'w') as arquivo:
+                        arquivo.write('')
+                    with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt', 'w') as arquivo:
+                        for jogador, timesorteio in resultados.items():
+                            arquivo.write(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}\n")       
+                else:
+                    continue
+            else:
+                resultados = sorteio()
+
+                with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt', 'w') as arquivo:
+                    for jogador, timesorteio in resultados.items():
+                        arquivo.write(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}\n")
+
+
+
+    
+
+menu()
