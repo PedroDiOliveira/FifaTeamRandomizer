@@ -55,9 +55,6 @@ def sorteio():
             
     return resultadosJogador
 
-sorteio()
-
-
 #########################################################
 ##Funcao que pega o dicionario e salva em um aquivo txt##
 #########################################################
@@ -74,6 +71,37 @@ def verificaArquivoVazio(nome_arquivo):
     with open(nome_arquivo, 'r') as arquivo:
         conteudo = arquivo.read()
         return not conteudo
+    
+###############################################
+##Funcao para lidar com a separacao dos potes##
+###############################################
+
+def separaPotes():
+    nomes = recebeNomes()
+    pote1 = []
+    pote2 = []
+    pote3 = []
+    pote4 = []
+    pote1.append(nomes[0])
+    pote1.append(nomes[1])
+    pote1.append(nomes[2])
+    pote1.append(nomes[3])
+    pote2.append(nomes[4])
+    pote2.append(nomes[5])
+    pote2.append(nomes[6])
+    pote2.append(nomes[7])
+    pote3.append(nomes[8])
+    pote3.append(nomes[9])
+    pote3.append(nomes[10])
+    pote3.append(nomes[11])
+    pote4.append(nomes[12])
+    pote4.append(nomes[13])
+    pote4.append(nomes[14])
+    pote4.append(nomes[15])
+
+    print(f" Pote 1: {pote1} \n Pote 2: {pote2} \n Pote 3: {pote3} \n Pote 4: {pote4}")
+    
+
 
 
 ########################################
@@ -102,24 +130,24 @@ def menu():
     while not sair:
         print("")
         opcao = int(input("Digite uma opcao: "))
-        if opcao == 1:#CASO 1
+        if opcao == 1:#Abre o arquivo txt de participantes e mostra todos na tela
             if verificaArquivoVazio('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Participantes.txt'):
                 print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Participantes.txt'.")
             else:
                 nomes = recebeNomes()
                 print(f'''Participantes:  {nomes}''')
                 continue
-        elif opcao == 2:#CASO 2
+        elif opcao == 2:##Abre o arquivo txt de clubes e mostra todos na tela
             if verificaArquivoVazio('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Clubes.txt'):
                 print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Clubes.txt'.")
             else:
                 clubes = recebeClubes()
                 print(f'''Participantes:  {clubes}''')
                 continue
-        elif opcao == 3:
+        elif opcao == 3:#Verifica se o arquivo de save esta vazio, caso esteja, ele sorteia e manda um novo save!
             if not verificaArquivoVazio('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt'):
                 sobrepor = int(input("Parece que ja existe um save anterior! Deseja sobrepor o antigo save?(1-sim/2-nao)"))
-                if sobrepor == 1:
+                if sobrepor == 1:#caso ja tenha um save ele pergunta ao usuario se quer apagar o save antigo e sorteia novamente
                     resultados = sorteio()
                     with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt', 'w') as arquivo:
                         arquivo.write('')
@@ -130,13 +158,16 @@ def menu():
                     continue
             else:
                 resultados = sorteio()
-
                 with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\saves\\logs.txt', 'w') as arquivo:
                     for jogador, timesorteio in resultados.items():
                         arquivo.write(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}\n")
-
+        elif opcao == 4:
+            with open('C:\\Users\\pedro\\FIFA\\FifaTeamRandomizer\\input\\Participantes.txt', 'r') as arquivo:
+                nomes = arquivo
 
 
     
 
-menu()
+#menu()
+
+separaPotes()
