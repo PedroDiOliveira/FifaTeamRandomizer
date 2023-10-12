@@ -1,14 +1,17 @@
 import random
 import json
+import os
+import time
 
 ###################################
 ##Caminhos para arquivos externos##
 ###################################
 ##Nao esquecer de colocar 2 barras entre casa caminho para o codigo nao dar erro de leitura
 
-caminhoParticipantes = 'C:\\Users\\Pedro.doliveira\\Desktop\\fifinha\\input\\Participantes.txt'
-caminhoClubes = 'C:\\Users\\Pedro.doliveira\\Desktop\\fifinha\\input\\Clubes.txt'
-caminhoLogs = 'C:\\Users\\Pedro.doliveira\\Desktop\\fifinha\\saves\\logs.txt'
+caminhoParticipantes = 'C:\\Users\\pedro\\fifa\\FifaTeamRandomizer\\input\\Participantes.txt'
+caminhoClubes = 'C:\\Users\\pedro\\fifa\\FifaTeamRandomizer\\input\\Clubes.txt'
+caminhoLogs = 'C:\\Users\\pedro\\fifa\\FifaTeamRandomizer\\saves\\logs.txt'
+caminhoConfrontos = 'C:\\Users\\pedro\\fifa\\FifaTeamRandomizer\\saves\\confrontos.txt'
 
 
 ##########################################
@@ -88,27 +91,38 @@ def verificaArquivoVazio(nome_arquivo):
 
 def separaPotes():
     nomes = recebeNomes()
+
     pote1 = []
     pote2 = []
     pote3 = []
     pote4 = []
-    pote1.append(nomes[0])
-    pote1.append(nomes[1])
-    pote1.append(nomes[2])
-    pote1.append(nomes[3])
-    pote2.append(nomes[4])
-    pote2.append(nomes[5])
-    pote2.append(nomes[6])
-    pote2.append(nomes[7])
-    pote3.append(nomes[8])
-    pote3.append(nomes[9])
-    pote3.append(nomes[10])
-    pote3.append(nomes[11])
-    pote4.append(nomes[12])
-    pote4.append(nomes[13])
-    pote4.append(nomes[14])
-    pote4.append(nomes[15])
 
+    potes = [
+        pote1,
+        pote2,
+        pote3,
+        pote4
+    ]
+
+    if len(nomes) < 16:
+        print('Nao ha nomes para preencher corretamente os potes.')
+        return
+
+    x = 0
+    for i in range(4):
+       #1 sorteio
+       potes[i].append(nomes[x])
+    
+       #2 sorteio
+       potes[i].append(nomes[x + 1])
+
+       #3 sorteio
+       potes[i].append(nomes[x + 2])
+    
+       #4 sorteio
+       potes[i].append(nomes[x + 3])
+
+       x = x + 4
     #print(f" Pote 1: {pote1} \n Pote 2: {pote2} \n Pote 3: {pote3} \n Pote 4: {pote4}")
 
     return pote1, pote2, pote3, pote4
@@ -124,7 +138,6 @@ def SeparaGrupos():
     grupo2 = []
     grupo3 = []
     grupo4 = []
-    # lista = [grupo1, grupo2, grupo3, grupo4]
 
     potes = [
         grupo1,
@@ -158,10 +171,50 @@ def SeparaGrupos():
        x -= 1
 
     
-    print(potes[0])
-    print(potes[1])
-    print(potes[2])
-    print(potes[3])
+    print(f"Grupo 1 -> {potes[0]}")
+    print(f"Grupo 2 -> {potes[1]}")
+    print(f"Grupo 3 -> {potes[2]}")
+    print(f"Grupo 4 -> {potes[3]}")
+
+    return potes[0], potes[1], potes[2], potes[3]
+
+#######################################
+##Funcao que cria uma tela de loading##
+#######################################
+
+def animacao():
+    os.system("cls")
+    for i in range(1, 11):  
+        print("Loading [" + "=" * i + " " * (10 - i) + "] " + str(i * 10) + "%")
+        time.sleep(0.3)
+        os.system('cls')
+
+####################################
+##Funcao que sorteia os confrontos##
+####################################
+
+def sorteio_confrontos(gerador_potes):
+    potes = gerador_potes()
+    confrontos_potes = []
+
+    # Gerar uma lista de todos os confrontos possíveis por pote
+    for pote in potes:
+        confrontos_pote = [(jogador1, jogador2) for i, jogador1 in enumerate(pote) for jogador2 in pote[i+1:] if jogador1 != jogador2]
+        confrontos_potes.append(confrontos_pote)
+
+    # Embaralhar a lista de confrontos dentro de cada pote
+    for confrontos_pote in confrontos_potes:
+        random.shuffle(confrontos_pote)
+
+    # Imprimir os confrontos organizados por pote
+    for i, pote in enumerate(potes, start=1):
+        print(f"Pote {i}:\n")
+        for confronto in confrontos_potes[i - 1]:
+            jogador1, jogador2 = confronto
+            print(f"{jogador1} x {jogador2}")
+        print("\n")
+
+
         
 
 ########################################
@@ -170,7 +223,11 @@ def SeparaGrupos():
 
 def menu():
     sair = False
-    print('''
+    os.system('cls')
+    
+    
+    while not sair:
+        print('''
           |-------------------------------------------------------|
           |                                                       |
           |  Bem vindo a x edicao do campeonato de Fifa do Betas  |
@@ -186,8 +243,6 @@ def menu():
           7- Menu De Exclusao
           8- Fechar programa                                                     
           ''')
-    
-    while not sair:
         print("")
         opcao = int(input("Digite uma opcao: "))
         if opcao == 1:#Abre o arquivo txt de participantes e mostra todos na tela
@@ -196,6 +251,7 @@ def menu():
             else:
                 nomes = recebeNomes()
                 print(f'''Participantes:  {nomes}''')
+                time.sleep(2)
                 continue
         elif opcao == 2:##Abre o arquivo txt de clubes e mostra todos na tela
             if verificaArquivoVazio(caminhoClubes):
@@ -203,11 +259,13 @@ def menu():
             else:
                 clubes = recebeClubes()
                 print(f'''Participantes:  {clubes}''')
+                time.sleep(2)
                 continue
         elif opcao == 3:#Verifica se o arquivo de save esta vazio, caso esteja, ele sorteia e manda um novo save!
             if not verificaArquivoVazio(caminhoLogs):
                 sobrepor = int(input("Parece que ja existe um save anterior! Deseja sobrepor o antigo save?(1-sim/2-nao)"))
                 if sobrepor == 1:#caso ja tenha um save ele pergunta ao usuario se quer apagar o save antigo e sorteia novamente
+                    animacao()
                     resultados = sorteio()
                     with open(caminhoLogs, 'w') as arquivo:
                         arquivo.write('')
@@ -217,18 +275,17 @@ def menu():
                 else:
                     continue
             else:
+                animacao()
                 resultados = sorteio()
                 with open(caminhoLogs, 'w') as arquivo:
                     for jogador, timesorteio in resultados.items():
                         arquivo.write(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}\n")
         elif opcao == 4:
-            with open(caminhoParticipantes, 'r') as arquivo:
-                nomes = arquivo
+            if verificaArquivoVazio(caminhoConfrontos):
+                print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Clubes.txt'.")
+            animacao()
+            sorteio_confrontos()
                 
 
-
-    
-
 menu()
-
 #SeparaGrupos()
