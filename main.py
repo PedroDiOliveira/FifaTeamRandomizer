@@ -217,8 +217,6 @@ def sorteio_confrontos():
 
 
 
-        
-
 ########################################
 ##Funcao do menu principal de execucao##
 ########################################
@@ -226,7 +224,6 @@ def sorteio_confrontos():
 def menu():
     sair = False
     os.system('cls')
-    
     
     while not sair:
         print('''
