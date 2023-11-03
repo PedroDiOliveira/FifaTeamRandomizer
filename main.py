@@ -193,8 +193,8 @@ def animacao():
 ##Funcao que sorteia os confrontos##
 ####################################
 
-def sorteio_confrontos(gerador_potes):
-    potes = gerador_potes()
+def sorteio_confrontos():
+    potes = SeparaGrupos()
     confrontos_potes = []
 
     # Gerar uma lista de todos os confrontos possíveis por pote
@@ -238,10 +238,7 @@ def menu():
           2- Mostrar times
           3- Sortear times
           4- Sortear Confrontos  
-          5- Players Log               
-          6- Confrontos Log
-          7- Menu De Exclusao
-          8- Fechar programa                                                     
+          5- Sair do programa                                                     
           ''')
         print("")
         opcao = int(input("Digite uma opcao: "))
@@ -285,6 +282,10 @@ def menu():
                 print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Clubes.txt'.")
             animacao()
             sorteio_confrontos()
+        elif opcao == 5:
+            print("Saindo do programa!")
+            sair = True
+
                 
 
 menu()
