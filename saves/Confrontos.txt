@@ -1,1 +1,31 @@
+Pote 1:
+Antonio x Paulo
+Alvaro x Luciano
+Antonio x Alvaro
+Paulo x Luciano
+Paulo x Alvaro
+Antonio x Luciano
 
+Pote 2:
+Vithor x Lucas/Daniel
+Enzo x Vithor
+Taua x Lucas/Daniel
+Enzo x Taua
+Enzo x Lucas/Daniel
+Taua x Vithor
+
+Pote 3:
+Thiago x Cayon
+Thiago x Dalca
+Cayon x PedroBrito/Malda
+Thiago x PedroBrito/Malda
+Dalca x Cayon
+Dalca x PedroBrito/Malda
+
+Pote 4:
+Ricardo x Cruxen
+Ricardo x Luis
+Ricardo x Drauzio
+Drauzio x Luis
+Drauzio x Cruxen
+Cruxen x Luis
