@@ -207,12 +207,14 @@ def sorteio_confrontos():
         random.shuffle(confrontos_pote)
 
     # Imprimir os confrontos organizados por pote
-    for i, pote in enumerate(potes, start=1):
-        print(f"Pote {i}:\n")
-        for confronto in confrontos_potes[i - 1]:
-            jogador1, jogador2 = confronto
-            print(f"{jogador1} x {jogador2}")
-        print("\n")
+    with open(caminhoConfrontos, 'w') as arquivo:
+        for i, pote in enumerate(potes, start=1):
+            arquivo.write(f"Pote {i}:\n")
+            for confronto in confrontos_potes[i - 1]:
+                jogador1, jogador2 = confronto
+                arquivo.write(f"{jogador1} x {jogador2}\n")
+            arquivo.write("\n")
+
 
 
         
@@ -228,11 +230,11 @@ def menu():
     
     while not sair:
         print('''
-          |-------------------------------------------------------|
-          |                                                       |
-          |  Bem vindo a x edicao do campeonato de Fifa do Betas  |
-          |                                                       |
-          |-------------------------------------------------------|
+          |-------------------------------------------------------------|
+          |                                                             |
+          |  Bem vindo la setima edicao do campeonato de Fifa do Betas  |
+          |                                                             |
+          |-------------------------------------------------------------|
 
           1- Mostrar participantes
           2- Mostrar times
@@ -279,14 +281,23 @@ def menu():
                         arquivo.write(f"Jogador: {jogador.ljust(12)}    Time: {timesorteio}\n")
         elif opcao == 4:
             if verificaArquivoVazio(caminhoConfrontos):
-                print("O arquivo parece estar vazio parece estar vazio! Por favor informe os participantes no arquivo 'Clubes.txt'.")
-            animacao()
-            sorteio_confrontos()
+                sorteio_confrontos()
+            else:
+                sobrepor = int(input("Parece que ja existe um save anterior! Deseja sobrepor o antigo save?(1-sim/2-nao)"))
+                if sobrepor == 1:#caso ja tenha um save ele pergunta ao usuario se quer apagar o save antigo e sorteia novamente
+                    animacao()
+                    with open(caminhoLogs, 'w') as arquivo:
+                        arquivo.write('')
+                    sorteio_confrontos()       
+                else:
+                    continue
+
         elif opcao == 5:
             print("Saindo do programa!")
             sair = True
 
-                
+################################
+##Funcao principal de execucao##
+################################
 
 menu()
-#SeparaGrupos()
